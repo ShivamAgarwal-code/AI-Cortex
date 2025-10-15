@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+anthropic
+langgraph
+browser-use
+pydantic
+python-multipart
+boto3
