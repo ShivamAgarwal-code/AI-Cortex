@@ -1,6 +1,6 @@
 "use client"
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { 
   Chat, 
@@ -47,6 +47,7 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
   const [currentScreenshots, setCurrentScreenshots] = useState<Screenshot[]>([]);
   const [currentAction, setCurrentAction] = useState<AgentAction | null>(null);
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const wsClientRef = useRef<any>(null);
 
   const handleWebSocketMessage = (data: WebSocketMessage) => {
     console.log('WebSocket message received:', data);
@@ -133,6 +134,9 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         setAgentStatus(AgentStatus.Error);
       }
     );
+    
+    // Store the client reference
+    wsClientRef.current = wsClient;
     
     // Connect immediately
     wsClient.connect();
@@ -258,10 +262,14 @@ export const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     setCurrentAction(thinkingAction);
     
     // Get WebSocket client (already connected from useEffect)
-    const wsClient = getWebSocketClient();
+    const wsClient = wsClientRef.current;
     
-    // Send task to the agent
-    wsClient.sendMessage({ task: content });
+    if (wsClient) {
+      // Send task to the agent
+      wsClient.sendMessage({ task: content });
+    } else {
+      console.error('WebSocket client not available');
+    }
     
     // Update initial action to browser agent initializing
     setTimeout(() => {

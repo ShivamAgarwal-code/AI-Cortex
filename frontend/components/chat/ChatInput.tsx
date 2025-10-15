@@ -41,7 +41,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
   return (
     <div className="relative">
       <form onSubmit={handleSubmit} className="relative">
-        <input
+        <textarea
           ref={textareaRef}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -52,7 +52,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage }) => {
               : "Type your message..."
           }
           disabled={isDisabled}
-          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/30 bg-white text-gray-900 placeholder-gray-500"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-amber-500/30 bg-white text-gray-900 placeholder-gray-500 resize-none"
+          rows={1}
         />
         <button
           type="submit"

@@ -41,6 +41,7 @@ export interface Chat {
   messages: Message[];
   createdAt: Date;
   updatedAt: Date;
+  isStarred?: boolean;
 }
 
 export interface TaskRequest {
